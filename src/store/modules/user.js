@@ -4,6 +4,9 @@ const state = {
     _id: null,
     login: null,
     uCode: null,
+    status: '',
+    token: localStorage.getItem('token') || '',
+    user : {}
 };
 
 const getters = {
