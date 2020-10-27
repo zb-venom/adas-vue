@@ -102,6 +102,7 @@ $blood: rgb(180, 0, 0);
     z-index: 100;
     position: absolute;
     min-height: 100vh;
+    height: 100%;
     width: 80px;
     max-width: 100%;
     background-color: $sidebar-background-color;

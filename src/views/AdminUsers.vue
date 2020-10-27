@@ -1,42 +1,40 @@
 <template>
-    <div class="conteiner">
+    <div class="content">
         <NavBar/>
-        <div class="content">
-            <div class="text">Пользователи</div>
-            <div class="card-user" v-for="user in users" v-bind:key="user.id">
-                <div class="card-over">
-                    <div class="center">
-                        <form><button class="edit"><i class="fas fa-user-edit"></i>Изменить</button></form>
-                        <form><button class="delete"><i class="fas fa-user-slash"></i>Удалить</button></form>
-                    </div>
+        <div class="text">Пользователи</div>
+        <div class="card-user" v-for="user in users" v-bind:key="user.id">
+            <div class="card-over">
+                <div class="center">
+                    <form><button class="edit"><i class="fas fa-user-edit"></i>Изменить</button></form>
+                    <form><button class="delete"><i class="fas fa-user-slash"></i>Удалить</button></form>
                 </div>
-                <div class="card-header">ADAS profile</div>
-                <div class="card-header"><i class="fas fa-user-circle"></i></div>
-                <div class="card-header">Профиль ADAS</div>
-                <img class="avatar" src="/img/avatar.jpg">
-                <div class="info">
-                    <label>Логин</label>
-                    <p>{{user.login}}</p>
-                    <label>О пользователе</label>
-                    <p>{{user.about}}</p>
-                    <label>E-mail</label>
-                    <p>{{user.eMail}}</p>
-                    <label>Телефон</label>
-                    <p>{{user.phone}}</p>
-                    <label>Тип</label>
-                    <p>{{user.type}}</p>
+            </div>
+            <div class="card-header">ADAS profile</div>
+            <div class="card-header"><i class="fas fa-user-circle"></i></div>
+            <div class="card-header">Профиль ADAS</div>
+            <img class="avatar" src="/img/avatar.jpg">
+            <div class="info">
+                <label>Логин</label>
+                <p>{{user.login}}</p>
+                <label>О пользователе</label>
+                <p>{{user.about}}</p>
+                <label>E-mail</label>
+                <p>{{user.eMail}}</p>
+                <label>Телефон</label>
+                <p>{{user.phone}}</p>
+                <label>Тип</label>
+                <p>{{user.type}}</p>
+            </div>
+            <div class="id">
+                <div id="id" @click="notification('ID')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
+                    <span><i class="fas fa-id-card"></i><span id="copyId">{{user._id}}</span></span>                   
+                    <span class="tooltip"><i class="far fa-copy"></i> Копировать ID Пользователя</span>
                 </div>
-                <div class="id">
-                    <div id="id" @click="notification('ID')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
-                        <span><i class="fas fa-id-card"></i><span id="copyId">{{user._id}}</span></span>                   
-                        <span class="tooltip"><i class="far fa-copy"></i> Копировать ID Пользователя</span>
-                    </div>
-                </div>
-                <div class="code">
-                    <div id="code" @click="notification('Индивидуальный код')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
-                        <span><i class="fas fa-qrcode"></i><span id="copyCode">{{user.code}}</span></span>                   
-                        <span class="tooltip"><i class="far fa-copy"></i> Копировать индивидуальный код пользователя</span>
-                    </div>
+            </div>
+            <div class="code">
+                <div id="code" @click="notification('Индивидуальный код')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
+                    <span><i class="fas fa-qrcode"></i><span id="copyCode">{{user.code}}</span></span>                   
+                    <span class="tooltip"><i class="far fa-copy"></i> Копировать индивидуальный код пользователя</span>
                 </div>
             </div>
         </div>
@@ -65,14 +63,15 @@ $grass: rgb(126, 200, 80);
 }
 
 .content {
-    position: relative;
-    left: 100px;
-    margin: 0 20px;
-    max-width: calc(100vw - 140px);
+    position: relative;   
+    width: calc(100vw - 130px);
+    padding-left: 100px;
+    padding-right: 20px;
     font-family: 'Exo 2', sans-serif;
     display: grid;
+    min-height: fit-content;
     grid-template-columns: repeat(auto-fit, 1fr);
-
+    
     .text {
         grid-column: span 2;
         margin-top: 20px;

@@ -34,15 +34,9 @@
 </template>
 
 <script>
-// import Hello from '../components/Hello.vue'
-// import Abouts from '../components/Abouts.vue'
 
 export default {
     title: 'ADAS | Регистрация',
-    // components: {
-    //     Hello,
-    //     Abouts
-    // }
 }
 </script>
 

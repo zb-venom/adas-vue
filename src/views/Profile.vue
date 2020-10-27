@@ -1,45 +1,43 @@
 <template>
-    <div class="conteiner">
+    <div class="content">
         <NavBar/>
-        <div class="content">
-            <div class="text">Профиль</div>
-            <div class="card-user">
-                <div class="card-header">ADAS profile</div>
-                <div class="card-header"><i class="fas fa-user-circle"></i></div>
-                <div class="card-header">Профиль ADAS</div>
-                <img class="avatar" src="/img/avatar.jpg">
-                <div class="info">
-                    <label>Логин</label>
-                    <p>{{user.login}}</p>
-                    <label>О пользователе</label>
-                    <p>{{user.about}}</p>
-                    <label>E-mail</label>
-                    <p>{{user.eMail}}</p>
-                    <label>Телефон</label>
-                    <p>{{user.phone}}</p>
-                    <label>Тип</label>
-                    <p>{{user.type}}</p>
-                </div>
-                <div class="id">
-                    <div id="id" @click="notification('ID')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
-                        <span><i class="fas fa-id-card"></i><span id="copyId">{{user._id}}</span></span>                   
-                        <span class="tooltip"><i class="far fa-copy"></i> Копировать ID Пользователя</span>
-                    </div>
+        <div class="text">Профиль</div>
+        <div class="card-user">
+            <div class="card-header">ADAS profile</div>
+            <div class="card-header"><i class="fas fa-user-circle"></i></div>
+            <div class="card-header">Профиль ADAS</div>
+            <img class="avatar" src="/img/avatar.jpg">
+            <div class="info">
+                <label>Логин</label>
+                <p>{{user.login}}</p>
+                <label>О пользователе</label>
+                <p>{{user.about}}</p>
+                <label>E-mail</label>
+                <p>{{user.eMail}}</p>
+                <label>Телефон</label>
+                <p>{{user.phone}}</p>
+                <label>Тип</label>
+                <p>{{user.type}}</p>
+            </div>
+            <div class="id">
+                <div id="id" @click="notification('ID')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
+                    <span><i class="fas fa-id-card"></i><span id="copyId">{{user._id}}</span></span>                   
+                    <span class="tooltip"><i class="far fa-copy"></i> Копировать ID Пользователя</span>
                 </div>
             </div>
-            <div class="card-qr">
-                <img class="qr" id="qr" alt="http://goqr.me/api/">
-                <div class="code">
-                    <div id="code" @click="notification('Индивидуальный код')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
-                        <span><i class="fas fa-qrcode"></i><span id="copyCode">{{user.code}}</span></span>                   
-                        <span class="tooltip"><i class="far fa-copy"></i> Копировать индивидуальный код пользователя</span>
-                    </div>
+        </div>
+        <div class="card-qr">
+            <img class="qr" id="qr" alt="http://goqr.me/api/">
+            <div class="code">
+                <div id="code" @click="notification('Индивидуальный код')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
+                    <span><i class="fas fa-qrcode"></i><span id="copyCode">{{user.code}}</span></span>                   
+                    <span class="tooltip"><i class="far fa-copy"></i> Копировать индивидуальный код пользователя</span>
                 </div>
             </div>
-            <div class="text">На руках</div>
-            <div class="onHands">
-                <div class="item">Пусто</div>
-            </div>
+        </div>
+        <div class="text">На руках</div>
+        <div class="onHands">
+            <div class="item">Пусто</div>
         </div>
         <div id="notification" class="notification"></div>
     </div>
@@ -65,11 +63,13 @@ $blood: rgb(180, 0, 0);
 }
 
 .content {
-    position: absolute;   
-    left: 80px;
-    margin: 0 20px;
+    position: relative;   
+    width: calc(100vw - 130px);
+    padding-left: 100px;
+    padding-right: 20px;
     font-family: 'Exo 2', sans-serif;
     display: grid;
+    min-height: fit-content;
     grid-template-columns: repeat(auto-fit, 1fr);
 
     .text {

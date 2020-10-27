@@ -1,53 +1,54 @@
 <template>
-    <div class="conteiner">
+    <div class="content">
         <NavBar/>
-        <div class="content">
-            <div class="text">Журнал</div>
-            <div class="logs" v-if="logs">
-                <div class="rows header">
-                    <div class="item">Пользователь</div>
-                    <div class="item">Оборудование</div>
-                    <div class="item">Получил</div>
-                    <div class="item">Вернул</div>
-                </div>
-                <div class="rows" v-for="log in logs" v-bind:key="log.id">
-                    <div class="item">{{log.user}}</div>
-                    <div class="item">{{log.device}}</div>
-                    <div class="item">{{log.received}}</div>
-                    <div class="item">{{log.returned}}</div>
-                </div>
-                <div class="rows footer"><div class="item"></div></div>
+        <div class="text">Журнал</div>
+        <div class="logs" v-if="logs">
+            <div class="rows header">
+                <div class="item">Пользователь</div>
+                <div class="item">Оборудование</div>
+                <div class="item">Получил</div>
+                <div class="item">Вернул</div>
             </div>
-            <div class="logs" v-else>
-                <div class="rows header">
-                    <div class="item">Пользователь</div>
-                    <div class="item">Оборудование</div>
-                    <div class="item">Получил</div>
-                    <div class="item">Вернул</div>
-                </div>
-                <div class="rows">
-                    <div class="item-full">
-                        <div class="loader-text" >Получение данных с сервера...</div>
-                        <div class="loader-container">
-                            <div class="loader"></div>
-                        </div>
+            <div class="rows" v-for="log in logs" v-bind:key="log.id">
+                <div class="item">{{log.user}}</div>
+                <div class="item">{{log.device}}</div>
+                <div class="item">{{log.received}}</div>
+                <div class="item">{{log.returned}}</div>
+            </div>
+            <div class="rows footer"><div class="item"></div></div>
+        </div>
+        <div class="logs" v-else>
+            <div class="rows header">
+                <div class="item">Пользователь</div>
+                <div class="item">Оборудование</div>
+                <div class="item">Получил</div>
+                <div class="item">Вернул</div>
+            </div>
+            <div class="rows">
+                <div class="item-full">
+                    <div class="loader-text" >Получение данных с сервера...</div>
+                    <div class="loader-container">
+                        <div class="loader"></div>
                     </div>
                 </div>
-                <div class="rows footer"><div class="item"></div></div>
             </div>
-            
-        </div>
+            <div class="rows footer"><div class="item"></div></div>
+        </div>            
     </div>
 </template>
 
 <style lang="scss" scoped>
+$gold: rgb(255, 212, 0);
+$blood: rgb(180, 0, 0);
+
 .content {
-    position: relative;
-    left: 100px;
-    margin: 0 20px;
-    max-width: calc(100vw - 140px);
+    position: relative;   
+    width: calc(100vw - 130px);
+    padding-left: 100px;
+    padding-right: 20px;
     font-family: 'Exo 2', sans-serif;
     display: grid;
+    min-height: fit-content;
     grid-template-columns: repeat(auto-fit, 1fr);
 
     .text {
