@@ -1,25 +1,88 @@
-<template>    
-    <div v-if="isLoggedIn">
-    
-    </div>
-    <div v-else>
-        <div class="content">
-        <div class="card">
-            <b class="card-header"><div class="center">Доступ к сайту ограничен</div></b>
-            <div class="card-body">
-                <p>Для получения доступа к системе необходимо <router-link class="blue" to="/auth">авторизоваться</router-link>.</p>
-                <p>– Если у Вас нет аккаунта в системе, Вам предстоит пройти <router-link class="blue" to="/auth">регистрацию</router-link> и дождать подтверждения аккаунта администрацией.</p>
-                <p>– Если у Вас уже есть аккаунт в системе, для этого <router-link class="blue" to="/auth">авторизируйтесь</router-link>.</p>
-                <br><br>
-                <p>Для одобрения аккаунта необходимо:</p>
-                <p>– в поле информации ввести настощие Фамилию Имя (Отчество) и  номер группы. <i>[Например: Иванов Иван Иванович, 717-1]</i></p>
-                <p>– пароль должен содержать как минимум 8 латинских символов, цифр и знаков: ?!,._-@# <i>[Например: 7@.U?v2t]</i></p>
-            </div>
-            <div class="card-footer">
-                <router-link class="card-footer-button" to="/auth"><div class="center">Войти в личный кабинет</div></router-link>
-                <router-link class="card-footer-button" to="/reg"><div class="center">Создать личный кабинет</div></router-link>
-            </div>
+<template>
+    <div class="container">
+        <div class="nav">
+            <div class="nav-free"></div>
+            <router-link class="nav-logo" onclick="window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });" to="/">ADAS</router-link>
+            <router-link class="nav-2" onclick="window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: 'smooth' });" to="/">О приложении</router-link>
+            <router-link class="nav-1" to="/signin">Войти</router-link>
+            <router-link class="nav-1" to="/signup">Зарегистрироваться</router-link>
+            <div class="nav-free"></div>
         </div>
-        </div>
+        <Hello/>
+        <Abouts/>
     </div>
 </template>
+
+<script>
+import Hello from '../components/Hello.vue'
+import Abouts from '../components/Abouts.vue'
+
+export default {
+    title: 'ADAS',
+    data() {
+        return {
+            login: this.$store.getters.LOGIN,
+        }
+    },
+    mounted: function () {            
+    },
+    components: {
+        Hello,
+        Abouts
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+
+.nav {
+    position: absolute;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    height: 50px;
+    min-width: 960px;
+    width: 100%;
+    color: white;
+    animation: navbar-in 500ms ease-in-out;
+    cursor: pointer;
+
+    > a:hover {
+        color: rgb(225, 229, 255);
+    }
+}
+
+.nav-free {
+    grid-column: span 2;
+    cursor: default;
+}
+
+.nav-logo {
+    grid-column: span 1;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.nav-1 {
+    grid-column: span 1;
+    font-size: 1.2rem;
+    margin: auto;
+}
+
+.nav-2 {
+    grid-column: span 3;
+    font-size: 1.2rem;
+    margin: auto;
+    margin-left: 0;
+}
+
+
+@keyframes navbar-in {
+    0% {
+        top: -50px;
+    }
+    100% {
+        top: 0;
+    }
+}
+</style>

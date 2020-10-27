@@ -1,40 +1,50 @@
-// import {http} from '../../scripts/http';
+// import axios from 'axios';
 
-const state = {
-    _id: null,
-    login: null,
-    uCode: null,
-    status: '',
-    token: localStorage.getItem('token') || '',
-    user : {}
-};
 
-const getters = {
-    _id: state => {
-        return state.playlist;
+let state = {
+    user: localStorage.user || {},
+    token: localStorage.token || ''
+}
+
+let getters = {
+    login: state => !!state.token,
+    isAdmin: state => state.user.isAdmin,
+    user: state => state.user,
+    token: state => state.token,
+}
+
+let mutations = {
+    login(state, user, token) {
+        state.user = user,
+        state.token = token
     },
-    login: state => {
-        return state.play;
-    },
-    uCode: state => {
-        return state.hash;
+    logout() {
+        state.user = {},
+        state.token = ''
     }
-};
-  
-const mutations = {
-    set_id: (state, payload) => {
-        state.playlist = payload;
+}
+
+let actions = {
+    login ({commit}, data) {
+        return new Promise((resolve, reject) => {
+            if (data.user && data.token) {                
+                localStorage.setItem('user', JSON.stringify(data.user))         
+                localStorage.setItem('token', data.token) 
+                commit('login', data.user, data.token)
+                resolve('success')
+            } else {
+                reject('no data')
+            }
+        })
     },
-    setLogin: (state, payload) => {
-        state.play = payload;
-    },
-    setUCode: (state, payload) => {
-        state.hash = payload;
+    logout({commit}) {
+        return new Promise((resolve) => {
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+            commit('logout')
+            resolve('success')
+        })
     }
-};
-
-const actions = {
-
 }
 
 export default {
