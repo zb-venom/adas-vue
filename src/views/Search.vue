@@ -13,6 +13,8 @@
                 <span>{{device.about}}</span>
                 <div class="type">{{device.type}}</div>
             </div>
+            <div class="place404">В аудитории 404: <span v-if="device.accounting404">{{device.accounting404}}</span><span v-else>нет</span></div>
+            <div class="place707">В аудитории 707: <span v-if="device.accounting707">{{device.accounting707}}</span><span v-else>нет</span></div>
         </div>
     </div>
 </template>
@@ -21,6 +23,7 @@
 $gold: rgb(255, 212, 0);
 $blood: rgb(180, 0, 0);
 $grass: rgb(126, 200, 80);
+$sky: rgb(135, 206, 235);
 
 .content {
     position: relative;   
@@ -66,6 +69,32 @@ $grass: rgb(126, 200, 80);
                 margin: auto;
                 border-radius: 1.2rem 1.2rem 0 0;
             }
+        }
+
+        .place404 {
+            position: absolute;
+            border-radius: 1.2rem;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: $sky;
+            top: 10px;
+            left: 10px;
+            width: fit-content;
+            height: fit-content;
+            padding: 0 10px 5px;
+        }
+
+        .place707 {
+            position: absolute;
+            border-radius: 1.2rem;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: $grass;
+            top: 40px;
+            left: 10px;
+            width: fit-content;
+            height: fit-content;
+            padding: 0 10px 5px;
         }
 
         .card-info {
@@ -145,7 +174,8 @@ export default {
     title: 'ADAS | Поиск оборудования',
     data() {
         return {
-            devices: null
+            devices: null,
+            search: ''
         }
     },
     methods: {
@@ -155,7 +185,7 @@ export default {
         },
     },
     mounted: async function() {     
-        http.post('/devices').then(response => {
+        http.post('/devices/search', {search: this.search}).then(response => {
             this.devices = response.data.devices
             if (response.data.logout) {
                 this.logout()

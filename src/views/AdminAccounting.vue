@@ -2,17 +2,67 @@
     <div class="content">
         <NavBar/>
         <div class="text">Учёт</div>
-        
+        <div class="table">
+            <div class="table-body" v-for="device in devices" v-bind:key="device.id">
+                <div class="item">
+                    <img class="min-img" v-if="device.imgSrc" :src="device.imgSrc">
+                    <img class="min-img" v-else src="https://res.cloudinary.com/adas/image/upload/v1604509799/devices/fq1aky4ce0ohry4cmq1k.jpg">
+                    <img class="big-img" v-if="device.imgSrc" :src="device.imgSrc">
+                    <img class="big-img" v-else src="https://res.cloudinary.com/adas/image/upload/v1604509799/devices/fq1aky4ce0ohry4cmq1k.jpg">
+                </div>
+                <div class="item">
+                    <div class="name">{{device.name}}</div>
+                    <div class="about">{{device.about}}</div>
+                    <div class="type">{{device.type}}</div>
+                </div>
+                <div class="item list">
+                    <div class="list-header">
+                        <div class="element"><i class="fas fa-location-arrow"></i></div>
+                        <div class="element"><i class="fas fa-qrcode"></i>&nbsp;Код</div>
+                        <div class="element">Примечание</div>
+                        <div class="element"><i class="fas fa-exclamation-circle"></i></div>
+                    </div>
+                    <form class="list-add" @submit.prevent="add(device._id)">
+                        <select v-model="place" required>
+                            <option value="404" selected>404</option>
+                            <option value="707">707</option>
+                        </select>
+                        <input class="element" v-model="code" readonly>
+                        <input class="element" v-model="note">
+                        <div class="actions">
+                            <button><i class="fas fa-plus"></i></button>
+                        </div>
+                    </form>
+                    <form class="list-body" v-for="acc in device.accounting" v-bind:key="acc.id" @submit.prevent="">
+                        <select v-if="acc.place == 404" v-model="acc.place" required>
+                            <option value="404" selected>404</option>
+                            <option value="707">707</option>
+                        </select>
+                        <select v-else v-model="acc.place" required>
+                            <option value="404">404</option>
+                            <option value="707" selected>707</option>
+                        </select>
+                        <input class="element" v-model="acc.code" readonly>
+                        <input class="element" v-model="acc.note">
+                        <div class="actions">
+                            <form @submit.prevent="edit(acc._id, acc.place, acc.note)"><button><i class="fas fa-save"></i></button></form>
+                            <form @submit.prevent="del(acc._id)"><button><i class="fas fa-trash-alt delete"></i></button></form>
+                            <form @submit.prevent="addToPrint(acc._id)"><button><i class="fas fa-print"></i></button></form>
+                        </div>                        
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 $gold: rgb(255, 212, 0);
 $blood: rgb(180, 0, 0);
+$grass: rgb(126, 200, 80);
 
 .content {
     position: relative;   
-    width: calc(100vw - 130px);
     padding-left: 100px;
     padding-right: 20px;
     font-family: 'Exo 2', sans-serif;
@@ -28,7 +78,160 @@ $blood: rgb(180, 0, 0);
         margin-bottom: 20px;
     }
 
+    .table {
+        display: grid;
+        width: 100%;
+
+        animation: card 1s ease;
+
+        .table-body {            
+            display: grid;
+            grid-template-columns: 100px 1fr 2fr;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.199);
+            border: 1px solid $grass;
+            border-radius: 1.2rem;
+            min-height: 200px;
+
+            .item {
+                padding: 10px;
+                position: relative;
+
+                &:hover {
+
+                    .big-img {
+                        visibility: visible;
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .min-img {
+                position: relative;
+                width: 90px;
+                margin: auto;
+                cursor: pointer;
+                border-radius: 50%;
+            }
+
+            .big-img {
+                visibility: hidden;
+                opacity: 0;
+                position: absolute;
+                z-index: 100;
+                width: 250px;
+                top: -50px;
+                left: 110px;
+                transition: all .25s ease;
+                border-radius: 1.2rem;
+            }
+
+            .name {                
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .about {
+                display: block;
+                font-weight: lighter;
+                text-align: justify;
+                max-height: 120px;
+                overflow: auto;
+            }
+
+            .type {
+                border-radius: 1.2rem;
+                margin-top: 10px;
+                background: rgba(0, 0, 0, 0.3);
+                color: $grass;
+                width: fit-content;
+                height: fit-content;
+                padding: 0 10px 5px;
+            }
+
+            .list {
+                display: grid;
+                margin: 10px;
+                max-height: 300px;
+                padding: 20px 0;
+                overflow: auto;
+
+                > div, form {
+                    display: grid;
+                    grid-template-columns: 70px 200px 1fr 80px;
+                    height: fit-content;
+                    text-align: center;
+                    margin-bottom: 10px;
+
+                    > input {
+                        outline: none;
+                        background: transparent;
+                        border-radius: 1.2rem;
+                        border: 1px solid $gold;
+                        padding: 10px;
+                        color: $gold;
+                        font-size: 1.1rem;
+                        margin-right: 10px;
+
+                        &:hover, &:active, &:focus {
+                            outline: none;
+                            border-bottom: 1px solid rgb(247, 255, 142);
+                            color: white;
+                        }
+                    }
+
+                    > select {
+                        outline: none;
+                        background: transparent;
+                        border-radius: 1.2rem;
+                        border: 1px solid $gold;
+                        margin-right: 10px;
+                        color: $gold;
+                        font-size: 1.1rem;
+
+                        > option {
+                            background: rgb(37, 35, 35);
+                        }
+                    }
+
+                    > .actions {
+                        
+                        form {
+                            display: inline-block;
+                        }
+                        
+                        button {
+                            background: transparent;
+                            border: none;
+                            color: $grass;
+                            padding: 5px;
+                            cursor: pointer;
+                                font-size: 18px;
+
+                            &:hover {
+                                font-size: 22px;
+                                padding: 3px;
+                            }
+                        }
+
+                        .delete {
+                            color: $blood;
+                        }
+                    }
+                }
+            }
+        }
+    }
     
+}
+
+@keyframes card {
+    0% {
+        margin-left: -1500px;
+    }
+    100% {
+        margin-left: 5px;
+    }
 }
 </style>
 
@@ -40,18 +243,66 @@ export default {
     title: 'ADAS | Оборудование',
     data() {
         return {
-            logs: null
+            devices: null,
+            code: new Date().getTime()+'0'+(new Date().getSeconds()+10),
+            place: '',
+            note: ''
         }
     },
     methods: {
         logout() {
             this.$store.dispatch('logout')  
             this.$router.push('/')
+        },
+        add(device_id) {
+            http.post('/admin/accounting/add', {place: this.place, code: this.code, note: this.note, device_id: device_id}).then(response => {
+                this.code = new Date().getTime()+'0'+(new Date().getSeconds()+10)
+                this.place = '',
+                this.note = ''
+                if (response.data.logout) {
+                    this.logout()
+                }  
+                http.post('/admin/accounting').then(response => {
+                    this.devices = response.data.devices
+                    if (response.data.logout) {
+                        this.logout()
+                    }
+                }) 
+            })
+        },
+        edit(_id, place, note) {
+            http.post('/admin/accounting/edit', {place: place, note: note, _id: _id}).then(response => {
+                this.code = new Date().getTime()+'0'+(new Date().getSeconds()+10)
+                this.place = '',
+                this.note = ''
+                if (response.data.logout) {
+                    this.logout()
+                }  
+                http.post('/admin/accounting').then(response => {
+                    this.devices = response.data.devices
+                    if (response.data.logout) {
+                        this.logout()
+                    }
+                }) 
+            })
+        },
+        del(_id) {
+            http.post('/admin/accounting/delete', {_id: _id}).then(response => {
+                if (response.data.logout) {
+                    this.logout()
+                }  
+                http.post('/admin/accounting').then(response => {
+                    this.devices = response.data.devices
+                    if (response.data.logout) {
+                        this.logout()
+                    }
+                }) 
+            })
         }
     },
     mounted: async function() {     
-        http.post('/logs').then(response => {
-            this.logs = response.data.logs
+        http.post('/admin/accounting').then(response => {
+            this.devices = response.data.devices
             if (response.data.logout) {
                 this.logout()
             }
