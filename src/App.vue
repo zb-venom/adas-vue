@@ -25,10 +25,19 @@ export default {
       error: '',
     }
   }, 
+  methods: {
+    logout() {
+        this.$store.dispatch('logout')  
+        this.$router.push('/')
+    },
+  },
   mounted: function() {
     http.post('/connect')
     .then(response => {
-      this.connect = response.data.connect
+      if (response.data.logout) {
+        this.logout()
+        this.connect = response.data.connect
+      }
     })
     .catch(e => {
       this.error = e
