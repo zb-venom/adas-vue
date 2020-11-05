@@ -64,7 +64,7 @@ $blood: rgb(180, 0, 0);
 
 .content {
     position: relative;   
-    width: calc(100vw - 130px);
+    width: calc(100% - 130px);
     padding-left: 100px;
     padding-right: 20px;
     font-family: 'Exo 2', sans-serif;

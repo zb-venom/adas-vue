@@ -1,29 +1,173 @@
 <template>
-    <div class="container">
+    <div class="content">
         <NavBar/>
+        <div class="text">Оборудование</div>
+        
+        <div class="card" v-for="device in devices" v-bind:key="device.id">
+            <div class="card-header">    
+                <img v-if="device.imgSrc" :src="device.imgSrc">
+                <img v-else src="https://res.cloudinary.com/adas/image/upload/v1604509799/devices/fq1aky4ce0ohry4cmq1k.jpg">
+            </div>
+            <div class="card-info">
+                <p>{{device.name}}</p>
+                <span>{{device.about}}</span>
+                <div class="type">{{device.type}}</div>
+            </div>
+        </div>
     </div>
 </template>
 
+<style lang="scss" scoped>
+$gold: rgb(255, 212, 0);
+$blood: rgb(180, 0, 0);
+$grass: rgb(126, 200, 80);
+
+.content {
+    position: relative;   
+    width: calc(100% - 130px);
+    padding-left: 100px;
+    padding-right: 20px;
+    font-family: 'Exo 2', sans-serif;
+    display: grid;
+    min-height: fit-content;
+    grid-template-columns: repeat(4, 1fr);
+
+    .text {
+        grid-column: span 4;
+        margin-top: 20px;
+        font-size: 40px;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+    
+    .card {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: 300px;
+        background: linear-gradient(90deg, #22252E 0%, #16171d 100%);
+        border-radius: 1.2rem;
+        display: grid;
+        grid-template-rows: repeat(2, 1fr);
+        transition: all 100ms ease;
+        margin: 5px;
+        margin-bottom: 20px;
+        cursor: pointer;
+
+        animation: card 1s ease;
+
+        .card-header {
+            position: relative;
+            grid-column: span 1;
+            height: 300px;
+
+            > img {
+                width: 100%;
+                margin: auto;
+                border-radius: 1.2rem 1.2rem 0 0;
+            }
+        }
+
+        .card-info {
+            display: grid;
+            padding: 10px;
+            height: fit-content;
+
+            > p {                
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            > span {
+                font-weight: lighter;
+                text-align: justify;
+            }
+
+            .type {
+                border-radius: 1.2rem;
+                margin-top: 10px;
+                background: rgba(0, 0, 0, 0.3);
+                color: $grass;
+                width: fit-content;
+                height: fit-content;
+                padding: 0 10px 5px;
+            }
+        }
+
+        
+    }
+}
+@media (max-width: 1200px) {
+    .content {
+        grid-template-columns: repeat(2, 1fr);
+        
+        .text {
+            grid-column: span 2;
+        }
+
+        .card-user {
+            grid-column: span 1;
+        }
+
+    }
+}
+
+@media (min-width: 2000px) {
+    .content {
+        grid-template-columns: repeat(6, 1fr);
+        
+        .text {
+            grid-column: span 6;
+        }
+
+        .card-user {
+            grid-column: span 1;
+        }
+
+    }
+}
+
+@keyframes card {
+    0% {
+        margin-left: -1500px;
+    }
+    100% {
+        margin-left: 5px;
+    }
+}
+</style>
+
 <script>
 import NavBar from '../components/NavBar.vue'
+import { http } from '../scripts/http'
 
 export default {
     title: 'ADAS | Поиск оборудования',
     data() {
         return {
-
+            devices: null
         }
     },
     methods: {
         logout() {
             this.$store.dispatch('logout')  
             this.$router.push('/')
-        }
+        },
     },
-    mounted: function() {        
+    mounted: async function() {     
+        http.post('/devices').then(response => {
+            this.devices = response.data.devices
+            if (response.data.logout) {
+                this.logout()
+            }
+        })
     }, 
     components: {
         NavBar
     }
 }
+
+
+
+
 </script>

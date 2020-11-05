@@ -99,7 +99,7 @@ $blood: rgb(180, 0, 0);
 }
 
 .sidebar-navigation {
-    z-index: 100;
+    z-index: 1000;
     position: absolute;
     min-height: 100vh;
     height: 100%;

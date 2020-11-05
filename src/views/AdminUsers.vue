@@ -34,7 +34,7 @@
             <div class="code">
                 <div id="code" @click="notification('Индивидуальный код')" onclick="navigator.clipboard.writeText(this.childNodes[0].childNodes[1].innerHTML)">
                     <span><i class="fas fa-qrcode"></i><span id="copyCode">{{user.code}}</span></span>                   
-                    <span class="tooltip"><i class="far fa-copy"></i> Копировать индивидуальный код пользователя</span>
+                    <span class="tooltip"><i class="far fa-copy"></i> Копировать код пользователя</span>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@ $grass: rgb(126, 200, 80);
 
 .content {
     position: relative;   
-    width: calc(100vw - 130px);
+    width: calc(100% - 130px);
     padding-left: 100px;
     padding-right: 20px;
     font-family: 'Exo 2', sans-serif;
@@ -82,7 +82,8 @@ $grass: rgb(126, 200, 80);
 
     .card-user { 
         position: relative;
-        padding: 20px;
+        padding: 15px;
+        margin-left: 5px;
         max-width: 700px;
         background: linear-gradient(90deg, #22252E 0%, #16171d 100%);
         border-radius: 1.2rem;
@@ -232,13 +233,14 @@ $grass: rgb(126, 200, 80);
             transition: all .2s ease;
 
             div {    
-                padding: 10px 20px;
+                padding: 10px 10px;
                 width: fit-content;
                 border-radius: 2rem;
                 border: 3px solid #373d4e;
                 cursor: pointer;
                 background: #373d4e;
                 position: relative;
+                font-size: 14px;
                 
                 i {
                     margin-right: 10px;
@@ -302,6 +304,7 @@ $grass: rgb(126, 200, 80);
                 background: #373d4e;
                 border: 3px solid #373d4e;
                 position: relative;
+                font-size: 14px;
                 
                 i {
                     margin-right: 10px;
@@ -364,7 +367,7 @@ $grass: rgb(126, 200, 80);
     }
 }
 
-@media (max-width: 1700px) {
+@media (max-width: 1300px) {
     .content {
         grid-template-columns: repeat(1, 1fr);
         
@@ -382,6 +385,39 @@ $grass: rgb(126, 200, 80);
     }
 }
 
+@media (min-width: 2200px) {
+    .content {
+        grid-template-columns: repeat(3, 1fr);
+        
+        .text {
+            grid-column: span 3;
+        }
+
+        .card-user {
+            grid-column: span 1;
+        }
+
+    }
+}
+
+
+
+@media (min-width: 3000px) {
+    .content {
+        grid-template-columns: repeat(5, 1fr);
+        
+        .text {
+            grid-column: span 5;
+        }
+
+        .card-user {
+            grid-column: span 1;
+        }
+
+    }
+}
+
+
 @keyframes card {
     0% {
         margin-left: -1500px;
@@ -397,7 +433,7 @@ import NavBar from '../components/NavBar.vue'
 import { http } from '../scripts/http'
 
 export default {
-    title: 'ADAS | Профиль',
+    title: 'ADAS | Пользователи',
     data() {
         return {
             users: []
