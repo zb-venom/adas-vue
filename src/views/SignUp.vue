@@ -3,26 +3,36 @@
         <div class="nav">
             <router-link class="nav-back" to="/">&#8249;&nbsp;Назад</router-link>
         </div>
-        <form class="form">
+        <form class="form" @submit.prevent="signup">
             <div class="form-head">
                 <h3>Регистрация.</h3>
                 <p>Мы любим новых пользователей &#128150;</p>
             </div>
             <div class="form-inputs">
-                <label for="login">&#129333; Логин</label><br>
-                <input type="text"><br>
-                <label for="text">&#128195; ФИО, № группы</label><br>
-                <input type="text"><br>
-                <label for="password">&#128274; Пароль</label><br>
-                <input type="text"><br>
+                <label for="login" class="error" v-if="errorType == 'login'">&#129333; {{ error }}</label>
+                <label for="login" v-else>&#129333; Логин</label><br>
+                <input type="text" name="" v-model="login" required/><br>
+
+                <label for="about" class="error" v-if="errorType == 'about'">&#129333; {{ error }}</label>
+                <label for="about" v-else>&#128195; ФИО, № группы</label><br>
+                <input type="text" v-model="about" required autocomplete="off"/><br>
+
+                <label for="password" class="error" v-if="errorType == 'password'">&#128274; {{ error }}</label>
+                <label for="password" v-else>&#128274; Пароль</label><br>
+                <input type="password" v-model="password" onKeyUp="this.value = this.value.replace(/[^a-zA-Z0-9@?!,.#]/,'');" required/><br>
             </div>
             <div class="form-inputs">
-                <label for="login">&#128231; E-mail</label><br>
-                <input type="text"><br>
-                <label for="login">&#128241; Телефон</label><br>
-                <input type="text"><br>
-                <label for="password">&#128274; Повторите пароль</label><br>
-                <input type="text"><br>
+                <label for="eMail" class="error" v-if="errorType == 'eMail'">&#129333; {{ error }}</label>
+                <label for="eMail" v-else>&#129333; E-mail</label><br>
+                <input type="email" name="" v-model="eMail" required/><br>
+
+                <label for="phone" class="error" v-if="errorType == 'phone'">&#129333; {{ error }}</label>
+                <label for="phone" v-else>&#128195; Телефон</label><br>
+                <input type="tel" v-model="phone" required autocomplete="off"/><br>
+
+                <label for="password" class="error" v-if="errorType == 'password'">&#128274; {{ error }}</label>
+                <label for="password" v-else>&#128274; Повторите пароль</label><br>
+                <input type="password" v-model="password2" onKeyUp="this.value = this.value.replace(/[^a-zA-Z0-9@?!,.#]/,'');" required/><br>
             </div>
             <div class="form-inputs span-2">
                 <label class="loose">Пароль должен сосотоять как минимум из 8 латинских букв, цифр или знаков @?!,.#</label><br>
@@ -34,9 +44,54 @@
 </template>
 
 <script>
+import { http } from '../scripts/http'
 
 export default {
     title: 'ADAS | Регистрация',
+    data() {
+        return {
+            login: '',
+            password: '',
+            password2: '',
+            about: '',
+            eMail: '',
+            phone: '',
+            error: '',
+            errorType: '',
+        }
+    },
+    methods: {
+        checkPass: function() {
+            if (this.password != this.password2) {
+                this.error = 'Пароли не совпадают.';
+                this.errorType = 'password'
+                return false
+            } else {
+                return true
+            }
+        },
+        signup: function() {
+            if (this.checkPass()) {
+                let data = {
+                    login: this.login,
+                    password: this.password,
+                    about: this.about, 
+                    eMail: this.eMail,
+                    phone: this.phone
+                }
+                http.post('/signup', data).then(response => {
+                    let res = response.data.response
+                    if (res.error) { this.errorType = res.errorType; this.error = res.error; }
+                    else { this.errorType = ''; this.error = '' }
+                    if (res.status == 200) {              
+                        this.$router.push('/')
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }
+        }
+    }, 
 }
 </script>
 
@@ -112,6 +167,10 @@ export default {
     font-size: 2rem;
     animation: for 2s ease-in-out;
     text-align: left;
+
+    > .error {
+        color:  rgb(255, 134, 134);
+    }
 
     > input {
         outline: none;

@@ -1,5 +1,5 @@
 <template>
-    <nav class="sidebar-navigation" id="leftMenu">
+    <nav class="sidebar-navigation" id="leftMenu" v-if="isAdmin">
         <div> 
             <div class="menu" @click="leftMenu">
                 <i class="fas fa-bars"></i>
@@ -44,6 +44,37 @@
                 <label>Печать QR-кодов</label>
                 <span class="tooltip">Печать QR-кодов</span>
             </router-link>
+            <hr>
+            <router-link class="profile" to="/profile">
+                <i class="fas fa-user-circle"></i>
+                <label>Профиль</label>
+                <span class="tooltip">Профиль</span>
+            </router-link>
+            <div class="logout" @click="logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <label>Выйти</label>
+                <span class="tooltip">Выйти</span>
+            </div>
+        </div>
+    </nav>
+    <nav class="sidebar-navigation" id="leftMenu" v-else>
+        <div> 
+            <div class="menu" @click="leftMenu">
+                <i class="fas fa-bars"></i>
+                <label>Меню</label>
+                <span class="tooltip">Развернуть меню</span>
+            </div>
+            <hr>
+            <router-link to="/search">
+                <i class="fas fa-search"></i>
+                <label>Поиск оборудования</label>
+                <span class="tooltip">Поиск оборудования</span>
+            </router-link>
+            <router-link to="/logs">
+                <i class="fas fa-clipboard-list"></i>
+                <label>Журнал</label>
+                <span class="tooltip">Журнал</span>
+            </router-link>            
             <hr>
             <router-link class="profile" to="/profile">
                 <i class="fas fa-user-circle"></i>
@@ -223,7 +254,7 @@ $blood: rgb(180, 0, 0);
 export default {
     data() {
         return {
-
+            isAdmin: JSON.parse(localStorage.getItem('user')).isAdmin
         }
     },
     mounted() {         

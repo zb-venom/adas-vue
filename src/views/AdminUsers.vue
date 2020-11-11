@@ -5,8 +5,8 @@
         <div class="card-user" v-for="user in users" v-bind:key="user.id">
             <div class="card-over">
                 <div class="center">
-                    <form><button class="edit"><i class="fas fa-user-edit"></i>Изменить</button></form>
-                    <form><button class="delete"><i class="fas fa-user-slash"></i>Удалить</button></form>
+                    <form @submit.prevent=""><button class="edit"><i class="fas fa-user-edit"></i>Изменить</button></form>
+                    <form @submit.prevent="deleteUser(user._id)"><button class="delete"><i class="fas fa-user-slash"></i>Удалить</button></form>
                 </div>
             </div>
             <div class="card-header">ADAS profile</div>
@@ -451,6 +451,18 @@ export default {
             setTimeout(() => {
                 notification.innerHTML = '';
             }, 3000)
+        },
+        deleteUser(_id) {        
+            if (confirm(`Удалить пользователя [id: ${_id}]?`)) {                        
+                http.post('/admin/users/delete', {_id: _id}).then(() => {
+                    http.post('/admin/users').then(response => {
+                        this.users = response.data.users
+                        if (response.data.logout) {
+                            this.logout()
+                        }
+                    })
+                }) 
+            } 
         }
     },
     mounted: async function() {     
