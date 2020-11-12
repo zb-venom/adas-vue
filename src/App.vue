@@ -59,8 +59,7 @@ export default {
     .catch(e => {
       this.error = e
     })
-    let con = setInterval(() => {
-      console.log(this.isBlock)      
+    let con = setInterval(() => {    
       http.post('/connect')
       .then(response => {
         this.connect = response.data.connect

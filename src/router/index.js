@@ -62,6 +62,15 @@ const routes = [
     },
   },
   {
+    path: '/admin/panel/user/edit',
+    name: 'AdminUsersEdit',
+    component: () => import('../views/AdminUsersEdit.vue'),
+    meta: {
+      auth: true,
+      isAdmin: true
+    },
+  },
+  {
     path: '/admin/panel/devices',
     name: 'AdminDevices',
     component: () => import('../views/AdminDevices.vue'),

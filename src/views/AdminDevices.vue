@@ -25,7 +25,7 @@
         <div class="card" v-for="device in devices" v-bind:key="device.id">
             <div class="card-over">
                 <div class="center">
-                    <form @submit.prevent=""><button class="edit"><i class="fas fa-edit"></i>Изменить</button></form>
+                    <form @submit.prevent="editDevice(device)"><button class="edit"><i class="fas fa-edit"></i>Изменить</button></form>
                     <form @submit.prevent="deleteDevice(device._id)"><button class="delete"><i class="fas fa-trash-alt"></i>Удалить</button></form>
                 </div>
             </div>
@@ -470,7 +470,20 @@ export default {
                     console.log(error)
                 })
             }
-        }
+        },
+        editDevice(device) {
+            this.name = device.name,
+            this.about = device.about,
+            this.type = device.type,
+            document.getElementById('img').src = device.imgSrc,
+            this.id = device._id
+            http.post('/devices').then(response => {
+                this.devices = response.data.devices
+                if (response.data.logout) {
+                    this.logout()
+                }
+            })
+    }
     },
     mounted: async function() {     
         http.post('/devices').then(response => {

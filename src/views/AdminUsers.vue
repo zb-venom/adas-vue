@@ -12,7 +12,7 @@
             <div class="card-header">ADAS profile</div>
             <div class="card-header"><i class="fas fa-user-circle"></i></div>
             <div class="card-header">Профиль ADAS</div>
-            <img class="avatar" src="/img/avatar.jpg">
+            <img class="avatar" :src="user.imgSrc">
             <div class="info">
                 <label>Логин</label>
                 <p>{{user.login}}</p>

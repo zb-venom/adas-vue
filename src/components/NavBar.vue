@@ -29,6 +29,11 @@
                 <label>Пользователи</label>
                 <span class="tooltip">Пользователи</span>
             </router-link>
+            <router-link to="/admin/panel/user/edit">
+                <i class="fas fa-users-cog"></i>
+                <label>Пользователи</label>
+                <span class="tooltip">Настройка пользователей</span>
+            </router-link>
             <router-link to="/admin/panel/devices">
                 <i class="fas fa-microchip"></i>
                 <label>Оборудание</label>
