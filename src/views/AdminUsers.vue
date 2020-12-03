@@ -1,11 +1,15 @@
 <template>
     <div class="content">
         <NavBar/>
-        <div class="text">Пользователи</div>
+        <div class="text">Пользователи  ({{num}})</div>
+        <div class="search">
+            <label>Поиск пользователя:</label>
+            <input v-model="search" type="text" >
+        </div>
         <div class="card-user" v-for="user in users" v-bind:key="user.id">
             <div class="card-over">
                 <div class="center">
-                    <form @submit.prevent=""><button class="edit"><i class="fas fa-user-edit"></i>Изменить</button></form>
+                    <form @submit.prevent="toEdit(user)"><button class="edit"><i class="fas fa-user-edit"></i>Изменить</button></form>
                     <form @submit.prevent="deleteUser(user._id)"><button class="delete"><i class="fas fa-user-slash"></i>Удалить</button></form>
                 </div>
             </div>
@@ -78,6 +82,36 @@ $grass: rgb(126, 200, 80);
         font-size: 40px;
         font-weight: 800;
         margin-bottom: 20px;
+    }
+    
+    .search {        
+        grid-column: span 2;
+        background: linear-gradient(90deg, #22252E 0%, #16171d 100%);
+        padding: 20px 10px;
+        margin-bottom: 20px;
+        border-radius: 1.2rem;
+        display: grid;
+
+        > label {
+            height: 40px;
+            margin-left: 10px;
+            font-size: 1.7rem;
+            grid-column: span 1;
+        }
+
+        > input {
+            display: block;
+            height: 35px;
+            border: none;
+            border-radius: 1.2rem;
+            padding: 10px 20px;
+            outline: none;
+            font-size: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.4);
+            margin: auto;
+            width: calc(100% - 40px);
+        }
     }
 
     .card-user { 
@@ -371,15 +405,7 @@ $grass: rgb(126, 200, 80);
     .content {
         grid-template-columns: repeat(1, 1fr);
         
-        .text {
-            grid-column: span 1;
-        }
-
-        .card-user {
-            grid-column: span 1;
-        }
-
-        .onHands {
+        .text, .card-user, .search, .onHands {
             grid-column: span 1;
         }
     }
@@ -436,7 +462,20 @@ export default {
     title: 'ADAS | Пользователи',
     data() {
         return {
-            users: []
+            users: [],
+            search: '',
+            num: 0,
+        }
+    },
+    watch: {
+        search: function (val) {
+            http.post('/admin/users', {search: val}).then(response => {
+                this.users = response.data.users
+                this.num = this.users.length
+                if (response.data.logout) {
+                    this.logout()
+                }
+            })
         }
     },
     methods: {
@@ -444,6 +483,11 @@ export default {
             this.$store.dispatch('logout')  
             this.$router.push('/')
         }, 
+        toEdit(user) {
+            localStorage.userEdit = JSON.stringify(user)
+            console.log(user)
+            this.$router.push({name: 'AdminUsersEdit'})
+        },
         notification(text) {       
             let notification = document.getElementById('notification');
             notification.innerHTML = '<i class="far fa-copy"></i>&nbsp;&nbsp;&nbsp;' + text + ' пользователя успешно скопирован';
@@ -466,8 +510,9 @@ export default {
         }
     },
     mounted: async function() {     
-        http.post('/admin/users').then(response => {
+        http.post('/admin/users', {search: this.search}).then(response => {
             this.users = response.data.users
+            this.num = this.users.length
             if (response.data.logout) {
                 this.logout()
             }

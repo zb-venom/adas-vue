@@ -14,13 +14,19 @@
                         <img src="https://res.cloudinary.com/adas/image/upload/v1605162780/devices/dqr6pvy9guow0dwg9s8y.jpg">
                         <span >Добавить нового пользователя</span>
                 </div>
-                <div class="user" v-for="u in users" :key="u" @click="select(u)">
+                <div class="user" v-for="u in users" :key="u.id" @click="select(u)">
                     <img :src="u.imgSrc">
-                    <span>{{u.about}} ({{u.login}})</span>
+                    <span>{{u.about}} ({{u.login}}) <i class="fas fa-exclamation-circle" v-if="u.typeNum == 0"></i></span>
+
                 </div>
             </div>
         </div>
-        <form class="editForm" @submit.prevent="editUser()">
+        <form class="editForm" @submit.prevent="">
+            <div class="header">Основные настройки
+                <div class="save">
+                    <button @click="editUser()">Сохранить</button>
+                </div>
+            </div>
             <div class="img">
                 <div class="upload" id="loader">
                     <div class="center">
@@ -61,16 +67,22 @@
                     </div>
                 </div>
             </div>
+            <p class="header">Дополнительные настройки</p>
             <div class="settings">
-                
+                <div class="resetPassword" v-if="user._id">
+                    <div class="text">Сбросить пароль пользователя до стандартного (1234567890). При авторизации пользователя, система потребует сменить пароль.</div>
+                    <button v-if="!user.new_password" @click="resetPassword(user._id)">Сбросить пароль</button>
+                    <button v-else disabled>Пароль сброшен</button>
+                </div>
             </div>
+
         </form>
     </div>
 </template>
 
 <style lang="scss" scoped>
 $gold: rgb(255, 212, 0);
-$blood: rgb(180, 0, 0);
+$blood: rgb(206, 67, 67);
 $grass: rgb(126, 200, 80);
 
 .content {
@@ -101,12 +113,17 @@ $grass: rgb(126, 200, 80);
 
             .selected {
                 border-radius: 1.2rem 1.2rem 0 0;
-                border-bottom: 5px solid $gold;
+
+                > i {
+                    transform: rotate(180deg);
+                    margin-left: -30px;
+                }
             }
 
             .forSelect {
                 visibility: visible; 
                 max-height: 250px;
+                border-top: 5px solid $gold;
                 border-bottom: 5px solid $gold;
             }
         }
@@ -116,7 +133,7 @@ $grass: rgb(126, 200, 80);
             background: rgb(31, 29, 29);
             border: 1px solid $gold;
             display: grid;
-            grid-template-columns: 40px 1fr 20px;
+            grid-template-columns: 40px 1fr 10px 10px;
             padding: 5px;
             transition: border-radius .3s ease;
 
@@ -135,8 +152,8 @@ $grass: rgb(126, 200, 80);
         }
 
         > .forSelect {
+            position: absolute;
             width: 100%;
-            top: 0;
             max-height: 0;
             overflow: auto;
             visibility: hidden;
@@ -156,6 +173,10 @@ $grass: rgb(126, 200, 80);
 
                 > span, i {
                     margin: auto 0;
+
+                    > i {
+                        color: $blood;
+                    }
                 }
 
                 &:hover {
@@ -174,6 +195,34 @@ $grass: rgb(126, 200, 80);
         background: rgb(31, 29, 29);
         display: grid;
         grid-template-columns: 350px 1fr;
+
+        > .header {
+            grid-column: span 4;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: 700;
+
+            > .save {
+                float: right;
+                
+                > button {
+                    margin: auto;
+                    height: fit-content;
+                    width: fit-content;
+                    padding: 10px 20px;
+                    border: 1px solid $grass;
+                    color:   $grass;
+                    background: transparent;
+                    border-radius: 1.2rem;
+                    cursor: pointer;
+
+                    &:hover {
+                        background: $grass;
+                        color: white;
+                    }
+                }
+            }
+        }
 
         .img {
             position: relative;
@@ -266,7 +315,7 @@ $grass: rgb(126, 200, 80);
 
             > input {
                 height: 30px;
-                width: 80%;
+                width: 95%;
                 font-size: 20px;
                 background: transparent;
                 border: none;
@@ -315,6 +364,56 @@ $grass: rgb(126, 200, 80);
         }
     }
 
+    .settings {
+        grid-column: span 4;
+        position: relative;
+
+        > .header {
+            padding: 0 20px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        > .resetPassword {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            height: fit-content;
+
+            > .text {
+                grid-column: span 1;
+                padding: 10px 20px;
+                font-size: 16px;
+                word-wrap: normal;
+                font-weight: normal;
+                color:  $blood;
+            }
+
+            > button {
+                margin: auto;
+                height: fit-content;
+                width: fit-content;
+                padding: 10px 20px;
+                border: 1px solid $blood;
+                color:   $blood;
+                background: transparent;
+                border-radius: 1.2rem;
+                cursor: pointer;
+
+                &:hover {
+                    background: $blood;
+                    color: white;
+                }
+
+                &:disabled {
+                    background: transparent;
+                    color: $grass;
+                    border: 1px solid $grass;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
 }
 </style>
 
@@ -334,6 +433,7 @@ export default {
                 imgSrc: 'https://res.cloudinary.com/adas/image/upload/v1605162780/devices/dqr6pvy9guow0dwg9s8y.jpg',
                 type: 'Студент',
                 typeNum: '2',
+                new_password: false
             },
         }
     },
@@ -354,12 +454,34 @@ export default {
                     type: 'Студент',
                     typeNum: '2',
                 }
+        },
+        editUser() {
+            http.post('/admin/users/edit', {user: this.user}).then(response => {
+               this.user = response.data.user
+                if (response.data.logout) {
+                    this.logout()
+                }
+            }) 
+            http.post('/admin/users').then(response => {
+                this.users = response.data.users.sort((a,b) => a.type < b.type ? 1 : -1)
+                if (response.data.logout) {
+                    this.logout()
+                }
+            }) 
+        },
+        resetPassword(_id) {
+            http.post('/admin/users/reset/password', {_id: _id}).then(response => {
+                this.user = response.data.user
+                if (response.data.logout) {
+                    this.logout()
+                }
+            }) 
         }
-        
     },
-    mounted: async function() {     
+    mounted: async function() {   
+        if (JSON.parse(localStorage.userEdit)._id) this.user = JSON.parse(localStorage.userEdit)
         http.post('/admin/users').then(response => {
-            this.users = response.data.users
+            this.users = response.data.users.sort((a,b) => a.type < b.type ? 1 : -1)
             if (response.data.logout) {
                 this.logout()
             }

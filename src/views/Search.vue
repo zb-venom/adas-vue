@@ -1,8 +1,11 @@
 <template>
     <div class="content">
         <NavBar/>
-        <div class="text">Оборудование</div>
-        
+        <div class="text">Оборудование ({{num}})</div>
+        <div class="search">
+            <label>Поиск оборудования:</label>
+            <input v-model="search" type="text" >
+        </div>
         <div class="card" v-for="device in devices" v-bind:key="device.id">
             <div class="card-header">    
                 <img v-if="device.imgSrc" :src="device.imgSrc">
@@ -41,6 +44,36 @@ $sky: rgb(135, 206, 235);
         font-size: 40px;
         font-weight: 800;
         margin-bottom: 20px;
+    }
+    
+    .search {        
+        grid-column: span 4;
+        background: linear-gradient(90deg, #22252E 0%, #16171d 100%);
+        padding: 20px 10px;
+        margin-bottom: 20px;
+        border-radius: 1.2rem;
+        display: grid;
+
+        > label {
+            height: 40px;
+            margin-left: 10px;
+            font-size: 1.7rem;
+            grid-column: span 1;
+        }
+
+        > input {
+            display: block;
+            height: 35px;
+            border: none;
+            border-radius: 1.2rem;
+            padding: 10px 20px;
+            outline: none;
+            font-size: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.4);
+            margin: auto;
+            width: calc(100% - 40px);
+        }
     }
     
     .card {
@@ -175,7 +208,19 @@ export default {
     data() {
         return {
             devices: null,
+            num: 0,
             search: ''
+        }
+    },
+    watch: {
+        search: function (val) {
+            http.post('/devices/search', {search: val}).then(response => {
+                this.devices = response.data.devices
+                this.num = this.devices.length
+                if (response.data.logout) {
+                    this.logout()
+                }
+            })
         }
     },
     methods: {
@@ -187,6 +232,7 @@ export default {
     mounted: async function() {     
         http.post('/devices/search', {search: this.search}).then(response => {
             this.devices = response.data.devices
+            this.num = this.devices.length
             if (response.data.logout) {
                 this.logout()
             }

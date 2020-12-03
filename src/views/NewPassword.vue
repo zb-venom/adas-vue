@@ -3,23 +3,21 @@
         <div class="nav">
             <router-link class="nav-back" to="/">&#8249;&nbsp;Назад</router-link>
         </div>
-        <form class="form" @submit.prevent="signin">
+        <form class="form" @submit.prevent="newPass">
             <div class="form-head">
-                <h3>Вход в приложение.</h3>
-                <p>Мы рады видеть Вас снова! &#128150;</p>
+                <h3>Изменение пароля</h3>
+                <p>Для пользователя {{login}}</p>
             </div>
             <div class="form-inputs">
-                <label for="login" class="error" v-if="errorType == 'login'">&#129333; {{ error }}</label>
-                <label for="login" v-else>&#129333; Логин или e-mail</label><br>
-                <input type="text" v-model="login" required/><br>
                 <label for="password" class="error" v-if="errorType == 'password'">&#128274; {{ error }}</label>
                 <label for="password" v-else>&#128274; Пароль</label><br>
                 <input type="password" v-model="password" required/><br>
+                <label for="password">&#128274; Повторите пароль</label><br>
+                <input type="password" v-model="password2" required/><br>
             </div>
             <div class="form-inputs span-2">
-                <label class="loose">Если Вы забыли пароль, то необходимо обраться к администратору.</label><br>
-                <button>Вход</button><br>
-                <label>У Вас всё ещё нет аккаунта? </label><router-link to="/signup">Зарегистрироваться</router-link>
+                <label class="loose">Пароль должен сосотоять как минимум из 8 латинских букв, цифр или знаков @?!,.#</label><br>
+                <button>Измениить</button><br>
             </div>
         </form>
     </div>
@@ -34,31 +32,30 @@ export default {
         return {
             login: '',
             password: '',
+            password2: '',
             error: '',
             errorType: '',
         }
     },
     methods: {
-        signin: function() {
+        newPass: function() {
+            let user = JSON.parse(localStorage.user_temp);
+            let token = localStorage.token_temp;
             let data = {
-                login: this.login,
-                password: this.password
+                password: this.password,
+                password2: this.password2,
+                token: token,
+                _id: user._id,
+                hash: this.$route.params.hash
             }
-            http.post('/signin', data).then(response => {
+            http.post('/new/password', data).then(response => {
                 let res = response.data.response
                 if (res.error) { this.errorType = res.errorType; this.error = res.error; }
                 else { this.errorType = ''; this.error = '' }
-                if (res.token) {   
-                    if (res.new_password_hash) {
-                        localStorage.user_temp = JSON.stringify(res.user)
-                        localStorage.token_temp = res.token
-                        console.log(JSON.stringify(res.user))
-                        this.$router.push({name: 'NewPassword', params: {hash: res.new_password_hash}})
-                    } else {
-                        this.$store.dispatch('login', { user: res.user, token: res.token })    
-                        this.$router.push('/profile')
-                    }
-                }
+                if (res.auth) {
+                    this.$store.dispatch('login', { user: user, token: token })    
+                    this.$router.push('/profile')
+                } 
             }).catch((error) => {
                 console.log(error)
             })

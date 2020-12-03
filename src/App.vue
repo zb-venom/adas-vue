@@ -29,7 +29,7 @@ export default {
     return {
       connect: false,
       error: '',
-      isBlock: false,
+      isBlock: false
     }
   }, 
   methods: {

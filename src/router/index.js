@@ -21,6 +21,14 @@ const routes = [
     },
   },
   {
+    path: '/new/password/:hash',
+    name: 'NewPassword',
+    component: () => import('../views/NewPassword.vue'),
+    meta: {
+      guest: true
+    },
+  },
+  {
     path: '/signup',
     name: 'Signup',
     component: () => import('../views/SignUp.vue'),

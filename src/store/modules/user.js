@@ -10,6 +10,7 @@ let getters = {
     login: state => !!state.token,
     isAdmin: state => state.user.isAdmin,
     isBlock: state => state.user.isBlock,
+    new_password: state => state.user.new_password,
     user: state => state.user,
     token: state => state.token,
 }
