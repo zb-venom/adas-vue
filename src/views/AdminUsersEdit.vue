@@ -74,6 +74,10 @@
                     <button v-if="!user.new_password" @click="resetPassword(user._id)">Сбросить пароль</button>
                     <button v-else disabled>Пароль сброшен</button>
                 </div>
+                <div class="resetPassword" v-else>
+                    <div class="text">Для пользователя будет установлен стандартный пароль (1234567890). При входе система предложит сменить пароль.</div>
+                    <button disabled>Пароль сброшен</button>
+                </div>
             </div>
 
         </form>
@@ -462,12 +466,12 @@ export default {
                 if (response.data.logout) {
                     this.logout()
                 }
-            }) 
-            http.post('/admin/users').then(response => {
-                this.users = response.data.users.sort((a,b) => a.type < b.type ? 1 : -1)
-                if (response.data.logout) {
-                    this.logout()
-                }
+                http.post('/admin/users').then(response => {
+                    this.users = response.data.users.sort((a,b) => a.type < b.type ? 1 : -1)
+                    if (response.data.logout) {
+                        this.logout()
+                    }
+                }) 
             }) 
         },
         resetPassword(_id) {
