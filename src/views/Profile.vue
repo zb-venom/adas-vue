@@ -359,7 +359,7 @@ export default {
         }
     },
     mounted: function() {   
-        
+        this.$router.push('/')
         document.getElementById('qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=' + this.user.code
     }, 
     components: {
