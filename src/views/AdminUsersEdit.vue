@@ -456,8 +456,9 @@ export default {
                 }
         },
         editUser() {
+            this.user.imgSrc = document.getElementById('img').src
             http.post('/admin/users/edit', {user: this.user}).then(response => {
-               this.user = response.data.user
+                this.user = response.data.user
                 if (response.data.logout) {
                     this.logout()
                 }
