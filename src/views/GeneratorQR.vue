@@ -121,14 +121,17 @@ $grass: rgb(126, 200, 80);
     }
 
     .editBlocks {
-        margin: 20px;
+        overflow: auto;
+        max-height: 100vh;
 
         .header {
             font-size: 2rem;
+            margin: 20px;
             margin-bottom: 10px;
         }
 
         .elements {
+
 
             > .element {
                 position: relative;
