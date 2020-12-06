@@ -45,7 +45,7 @@
                 <span class="tooltip">Учёт</span>
             </router-link>
             <router-link to="/admin/panel/generator/qrcode">
-                <i class="fas fa-print"></i>
+                <i class="fas fa-print"><i class="qr fas fa-exclamation" v-if="qrNum != 0"></i></i>
                 <label>Печать QR-кодов</label>
                 <span class="tooltip">Печать QR-кодов</span>
             </router-link>
@@ -172,8 +172,22 @@ $blood: rgb(180, 0, 0);
 			
 			i {
                 font-size: 24px;
+                position: relative;
 
-				transition: all ease 450ms;
+                transition: all ease 450ms;
+                
+                > .qr {
+                    position: absolute;
+                    margin-left: -10px;
+                    margin-top: -10px;
+                    font-size: .8rem;
+                    border-radius: 50%;
+                    background: $blood;
+                    width: 1.3rem;
+                    height: 1.1rem;
+                    padding-top: 0.3rem;
+                    color: white;
+                }
             }
 		
 			.tooltip {
@@ -259,10 +273,12 @@ $blood: rgb(180, 0, 0);
 export default {
     data() {
         return {
-            isAdmin: JSON.parse(localStorage.getItem('user')).isAdmin
+            isAdmin: JSON.parse(localStorage.getItem('user')).isAdmin,
+            qrNum: 0
         }
     },
     mounted() {         
+        this.qrNum = localStorage.devices.length
         let leftMenu = document.getElementById('leftMenu');
         function outsideClickListener(event) {
             if (leftMenu.className == 'sidebar-navigation active' && !leftMenu.contains(event.target)) {

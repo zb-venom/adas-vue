@@ -95,6 +95,15 @@ const routes = [
       auth: true,
       isAdmin: true
     },
+  },
+  {
+    path: '/admin/panel/generator/qrcode',
+    name: 'GeneratorQR',
+    component: () => import('../views/GeneratorQR.vue'),
+    meta: {
+      auth: true,
+      isAdmin: true
+    },
   }
 ]
 

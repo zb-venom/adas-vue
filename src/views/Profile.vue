@@ -358,8 +358,8 @@ export default {
             }, 3000)
         }
     },
-    mounted: function() {   
-        this.$router.push('/')
+    mounted: function() {    
+        if (!this.user) location.reload()
         document.getElementById('qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=' + this.user.code
     }, 
     components: {

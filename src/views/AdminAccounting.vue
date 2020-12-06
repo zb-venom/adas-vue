@@ -47,7 +47,7 @@
                         <div class="actions">
                             <form @submit.prevent="edit(acc._id, acc.place, acc.note)"><button><i class="fas fa-save"></i></button></form>
                             <form @submit.prevent="del(acc._id)"><button><i class="fas fa-trash-alt delete"></i></button></form>
-                            <form @submit.prevent="addToPrint(acc._id)"><button><i class="fas fa-print"></i></button></form>
+                            <form @submit.prevent="addToPrint(acc, device)"><button><i class="fas fa-print"></i></button></form>
                         </div>                        
                     </form>
                 </div>
@@ -270,6 +270,19 @@ export default {
                 }) 
             })
         },
+        addToPrint(device, deviceName) {
+            // localStorage.removeItem('devices')
+            // console.log(device + deviceName.name)   
+            device.name = deviceName.name
+            device.orientation = 'portrait'
+            device.size = 'middle'
+            if (!localStorage.devices) {             
+                localStorage.devices = []                
+                localStorage.devices += '[' + JSON.stringify(device)
+            } else  {
+                localStorage.devices += ',' + JSON.stringify(device)
+            }
+        },
         edit(_id, place, note) {
             http.post('/admin/accounting/edit', {place: place, note: note, _id: _id}).then(response => {
                 this.code = new Date().getTime()+'0'+(new Date().getSeconds()+10)
@@ -303,6 +316,8 @@ export default {
     mounted: async function() {     
         http.post('/admin/accounting').then(response => {
             this.devices = response.data.devices
+            // console.log(this.devices)
+            // console.log(JSON.stringify(this.devices))
             if (response.data.logout) {
                 this.logout()
             }

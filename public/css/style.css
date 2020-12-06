@@ -103,3 +103,84 @@ p, h1, h2, h3, h4, h5, h6 {
         transform: rotate(360deg);
     }
 }
+
+.column-1 {
+    grid-column: span 1;
+}
+
+.column-2{
+    grid-column: span 2;
+}
+
+.column-3 {
+    grid-column: span 3;
+}
+
+.column-4 {
+    grid-column: span 4;
+}
+
+.column-5 {
+    grid-column: span 5;
+}
+
+.column-6 {
+    grid-column: span 6;
+}
+
+.column-7 {
+    grid-column: span 7;
+}
+
+.column-8{
+    grid-column: span 8;
+}
+
+.column-9 {
+    grid-column: span 9;
+}
+
+.column-10 {
+    grid-column: span 10;
+}
+
+.column-11 {
+    grid-column: span 11;
+}
+
+.column-12 {
+    grid-column: span 12;
+}
+
+.column-18 {
+    grid-column: span 18;
+}
+
+
+.row-1 {
+    grid-row: span 1;
+}
+
+.row-2 {
+    grid-row: span 2;
+}
+
+.row-3 {
+    grid-row: span 3;
+}
+
+.row-4 {
+    grid-row: span 4;
+}
+
+.row-5 {
+    grid-row: span 5;
+}
+
+.row-6 {
+    grid-row: span 6;
+}
+
+.row-8 {
+    grid-row: span 8;
+}

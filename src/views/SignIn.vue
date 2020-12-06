@@ -56,7 +56,7 @@ export default {
                         this.$router.push({name: 'NewPassword', params: {hash: res.new_password_hash}})
                     } else {
                         this.$store.dispatch('login', { user: res.user, token: res.token })    
-                        this.$router.push('/')
+                        this.$router.push('/profile')
                     }
                 }
             }).catch((error) => {
