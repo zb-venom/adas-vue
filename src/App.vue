@@ -29,7 +29,8 @@ export default {
     return {
       connect: false,
       error: '',
-      isBlock: false
+      isBlock: false,
+      devices: ''
     }
   }, 
   methods: {
@@ -40,6 +41,7 @@ export default {
     },
   },
   mounted: function() {
+    if (localStorage.devices) this.devices = localStorage.devices
     try {
       if (JSON.parse(localStorage.getItem('user')).isBlock) {
         this.isBlock = true      

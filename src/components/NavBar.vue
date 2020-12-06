@@ -277,15 +277,16 @@ export default {
             qrNum: 0
         }
     },
-    mounted() {         
-        this.qrNum = localStorage.devices.length
+    mounted() {     
         let leftMenu = document.getElementById('leftMenu');
         function outsideClickListener(event) {
             if (leftMenu.className == 'sidebar-navigation active' && !leftMenu.contains(event.target)) {
                 leftMenu.className = 'sidebar-navigation'
             }
         }
-        document.addEventListener('click', outsideClickListener)
+        document.addEventListener('click', outsideClickListener)    
+        try { this.qrNum = localStorage.devices.length } 
+        catch {return}
     },
     methods: {
         logout() {

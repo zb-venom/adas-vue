@@ -21,3 +21,38 @@ function handleFiles(file) {
         document.getElementById('img').src = JSON.parse(data).url
     });
 }
+
+
+function savePDF(orientation) {
+    html2canvas(document.getElementsByClassName('page')[0], {
+        useCORS: true,
+        logging : true, 
+        onrendered: function(canvas) {
+            var img = new Image();
+            img.onload = function() {
+                img.onload = null;
+                document.body.appendChild(img);
+            };
+
+            img.onerror = function() {
+                img.onerror = null;
+                if(window.console.log) {
+                    window.console.log("Not loaded image from canvas.toDataURL");
+                } else {
+                    alert("Not loaded image from canvas.toDataURL");
+                }
+            };
+
+            imageString = canvas.toDataURL('image/png');
+        }
+    }).then(canvas => {
+        var doc = new jsPDF({
+            orientation: orientation,
+            format: 'a4',
+        });
+        doc.addImage(canvas.toDataURL(), 'PNG', 0, 0);
+        doc.save('test.pdf');
+    })
+    
+
+}
