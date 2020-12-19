@@ -13,6 +13,7 @@ let getters = {
     new_password: state => state.user.new_password,
     user: state => state.user,
     token: state => state.token,
+    code: state => state.code,
 }
 
 let mutations = {

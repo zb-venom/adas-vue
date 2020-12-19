@@ -52,7 +52,6 @@ export default {
                     if (res.new_password_hash) {
                         localStorage.user_temp = JSON.stringify(res.user)
                         localStorage.token_temp = res.token
-                        console.log(JSON.stringify(res.user))
                         this.$router.push({name: 'NewPassword', params: {hash: res.new_password_hash}})
                     } else {
                         this.$store.dispatch('login', { user: res.user, token: res.token })    

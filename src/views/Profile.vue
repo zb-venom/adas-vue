@@ -36,8 +36,11 @@
             </div>
         </div>
         <div class="text">На руках</div>
-        <div class="onHands">
-            <div class="item">Пусто</div>
+        <div v-if="onHands" class="onHands">
+            <div v-for="item in onHands" v-bind:key="item.id" class="item">Название: {{item.name}} | Аудитория: {{item._doc.place}} | Code: {{item._doc.code}}</div>
+        </div>
+        <div v-else class="onHands">
+            <div class="item" >Пусто</div>
         </div>
         <div id="notification" class="notification"></div>
     </div>
@@ -336,12 +339,14 @@ $blood: rgb(180, 0, 0);
 
 <script>
 import NavBar from '../components/NavBar.vue'
+import { http } from '../scripts/http'
 
 export default {
     title: 'ADAS | Профиль',
     data() {
         return {
-            user: JSON.parse(this.$store.getters.user) || {}
+            user: JSON.parse(this.$store.getters.user) || {},
+            onHands: null
         }
     },
     methods: {
@@ -361,6 +366,14 @@ export default {
     mounted: function() {    
         if (!this.user) location.reload()
         document.getElementById('qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=' + this.user.code
+        console.log(this.user._id)
+        http.post('/user/onhands', {_id: this.user._id}).then(response => {
+            this.onHands = response.data.have
+            console.log(response.data.have)
+            if (response.data.logout) {
+                this.logout()
+            }
+        })   
     }, 
     components: {
         NavBar
